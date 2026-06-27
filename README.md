@@ -2,7 +2,7 @@
 
 > **Status: Work In Progress** — Core image and video generation pipelines are functional. TTS, on-screen text rendering, and full automated assembly are under active development.
 
-AI Schemea is a **local AI-powered documentary video production tool**. It takes a structured JSON description of a video's scenes and drives a full generation pipeline: producing images via **Flux 2** and converting them to short video clips via **Wan 2.1 Image-to-Video**, all orchestrated through a local **ComfyUI** instance. A **Tkinter desktop UI** provides scene-by-scene prompt editing, image review, image selection for historical photo slideshows, and video generation control.
+AI Schemea is a **local AI-powered documentary video production tool**. It takes a structured JSON description of a video's scenes and drives a full generation pipeline: producing images via **Flux 2** and converting them to short video clips via **Wan 2.1 Image-to-Video**, all orchestrated through a local **ComfyUI** instance. A **Tkinter desktop UI** provides scene-by-scene prompt editing, image review, image selection for  photo slideshows, and video generation control.
 
 The project was built for documentary-style short-form content — think YouTube explainers or social media reels — where each scene has a visual, a voiceover line, and optional motion.
 
@@ -13,7 +13,7 @@ The project was built for documentary-style short-form content — think YouTube
 - **Scene-driven JSON pipeline** — paste a structured JSON payload and the app parses it into visual prompts, animation prompts, on-screen text, VO lines, and durations
 - **AI image generation** — sends prompts to ComfyUI running Flux 2 (GGUF-quantised), with optional Charcoal LoRA for stylised illustration output
 - **AI video generation** — converts approved images to short video clips using Wan 2.1 I2V (14B, GGUF), with per-scene positive and negative motion prompts
-- **Historical photo slideshow builder** — select real archival photos for documentary scenes, assign aspect ratios (4:3 / 9:16), and export polished slideshow clips with rounded corners, blurred borders, and click SFX via MoviePy
+- ** photo slideshow builder** — select real archival photos for documentary scenes, assign aspect ratios (4:3 / 9:16), and export polished slideshow clips with rounded corners, blurred borders, and click SFX via MoviePy
 - **AI voice-over via TTS** — Qwen3-TTS voice cloning through ComfyUI generates narration in FLAC format
 - **Dark corporate UI** — scene browser with image grid, editable prompt fields, Keep & Delete Rest, Edit Prompt & Regenerate, and Video Process controls
 - **Async parallel generation** — up to 4 concurrent image or video jobs using `asyncio` + `ThreadPoolExecutor`
@@ -117,7 +117,7 @@ ai-schemea/
 ├── AI_App.py                   # Main Tkinter UI + JSON parsing + pipeline coordination
 ├── Flux_Image_Gen.py           # ComfyUI image generation via Flux 2
 ├── WAN_I2V_Gen.py              # ComfyUI video generation via Wan 2.1 I2V
-├── Image_Sequence_Scenes.py    # Historical photo slideshow assembly (MoviePy)
+├── Image_Sequence_Scenes.py    #  photo slideshow assembly (MoviePy)
 ├── Qwen_TTS.py                 # ComfyUI TTS generation via Qwen3-TTS
 ├── pipeline_tasks.py           # Legacy async task wrappers (superseded by AI_App.py)
 ├── main_app.py                 # Legacy UI (superseded by AI_App.py)
@@ -127,12 +127,12 @@ ai-schemea/
 │
 ├── Text_Files/
 │   ├── processed_output.json   # Parsed scene data (auto-generated from UI input)
-│   └── historical_selections.json  # User image selections + aspect ratios
+│   └── _selections.json  # User image selections + aspect ratios
 │
 ├── IMAGE/                      # Generated images (scene{N}_{index}.png)
 ├── VIDEO/                      # Generated video clips (scene{N}_node56_{index}.mp4)
 ├── VOICE/                      # Generated TTS audio (node{N}_{index}.flac)
-├── historical_photos/          # Archival/reference images for documentary scenes
+├── _photos/          # Archival/reference images for documentary scenes
 ├── SFX/
 │   └── click.mp3               # Sound effect used in slideshow transitions
 │
@@ -168,10 +168,10 @@ ai-schemea/
 12. Each image is sent to `WAN_I2V_Gen.run()` with its positive and negative motion prompts
 13. ComfyUI runs the Wan 2.1 I2V workflow (480p, 49 frames at 16 fps, ≈3 s clips) and saves MP4s to `VIDEO/`
 
-### Phase 5 — Historical Photo Sequences
-14. The **Image Sequence Scenes** tab shows scenes flagged as `historical_photo: true`
-15. User browses archival images from `historical_photos/`, selects images per scene, and sets an aspect ratio (4:3 or 9:16)
-16. **Finish Selection** saves choices to `historical_selections.json`
+### Phase 5 —  Photo Sequences
+14. The **Image Sequence Scenes** tab shows scenes flagged as `_photo: true`
+15. User browses archival images from `_photos/`, selects images per scene, and sets an aspect ratio (4:3 or 9:16)
+16. **Finish Selection** saves choices to `_selections.json`
 17. **🖼 Generate Image Scenes** calls `Image_sequence_generation()` via MoviePy:
     - Distributes scene duration equally across selected images
     - Applies rounded corners and blurred dark borders
@@ -196,14 +196,14 @@ The application accepts an array of scene objects. Each object may contain the f
     // REQUIRED
     "scene": 1,                          // integer — scene number (used for file naming)
 
-    // VISUAL (mutually exclusive with historical_photo / reference_visual)
+    // VISUAL (mutually exclusive with _photo / reference_visual)
     "primary_visual_image": "...",        // string | null — Flux 2 image prompt
     "animation": "...",                  // string | null — Wan I2V positive motion prompt
     "negative_video_prompt": "...",      // string | null — Wan I2V negative motion prompt
 
-    // HISTORICAL PHOTO MODE (overrides image generation)
-    "historical_photo": false,           // boolean — if true, skip image gen; use archival photos
-    "historical_photo_description": "...", // string — description shown in UI (historical mode)
+    //  PHOTO MODE (overrides image generation)
+    "_photo": false,           // boolean — if true, skip image gen; use archival photos
+    "_photo_description": "...", // string — description shown in UI ( mode)
 
     // REFERENCE VISUAL MODE (overrides image generation)
     "reference_visual": null,            // string | null — URL of an image to download instead
@@ -224,7 +224,7 @@ The application accepts an array of scene objects. Each object may contain the f
 
 ### Visual Mode Logic
 
-| `historical_photo` | `reference_visual` | `primary_visual_image` | Behaviour |
+| `_photo` | `reference_visual` | `primary_visual_image` | Behaviour |
 |---|---|---|---|
 | `false` | `null` | string | AI image generated via Flux 2 |
 | `false` | URL string | (ignored) | Image downloaded from URL |
@@ -242,7 +242,7 @@ After parsing, the app writes a structured file with seven top-level keys:
   "vo_script":        "Combined VO narration as a single string",
   "scene_vo_lines":   [{ "scene": 1, "vo_line": "..." }],
   "scene_durations":  [{ "scene": 1, "duration_seconds": 4 }],
-  "historical_photos":[{ "scene": 6, "historical_photo_description": "...", "vo_line": "...", "duration_seconds": 5 }]
+  "_photos":[{ "scene": 6, "_photo_description": "...", "vo_line": "...", "duration_seconds": 5 }]
 }
 ```
 
@@ -284,7 +284,7 @@ Both image and video generation use the same ComfyUI API pattern:
 - [x] Dark theme Tkinter UI with scene browser
 - [x] Inline prompt editing and single-scene regeneration
 - [x] Keep & Delete Rest for batch management
-- [x] Historical photo slideshow builder with MoviePy
+- [x]  photo slideshow builder with MoviePy
 - [x] Per-scene aspect ratio selection (4:3 / 9:16)
 - [x] Rounded corner + blurred border image treatment
 - [x] Click SFX on slideshow transitions
