@@ -1,0 +1,54 @@
+{
+  "21": {
+    "inputs": {
+      "filename_prefix": "audio/ComfyUI",
+      "audioUI": "",
+      "audio": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "SaveAudio",
+    "_meta": {
+      "title": "Save Audio (FLAC)"
+    }
+  },
+  "24": {
+    "inputs": {
+      "audio": "audio [vocals].mp3",
+      "audioUI": "/api/view?filename=audio%20%5Bvocals%5D.mp3&type=input&subfolder=&rand=0.7741705444247814"
+    },
+    "class_type": "LoadAudio",
+    "_meta": {
+      "title": "Load Audio"
+    }
+  },
+  "40": {
+    "inputs": {
+      "target_text": "What almost killed Wikipedia in 2005?\nExplosive growth flooded the site, edits poured in.\nAnyone could edit, which was brilliant and risky.\nVandalism and hoaxes spread fast, unnoticed at first.\nThen the Seigenthaler hoax hit the headlines.\nA respected journalist was falsely accused, reputation was damaged.\nMainstream media criticized Wikipedia's reliability and public trust fell.\nVolunteer editors burned out and many left.\nEdit wars made pages unstable, facts flipped back and forth.\nLegal worries and reputation risk multiplied, pressure grew,\nLeadership faced a crisis and they acted quickly.\nThey added page protection and emergency rules,\nAdmin tools improved and vandals were caught faster,\nSourcing rules tightened, citations became vital,\nCommunity governance matured with votes and arbitration.\nTransparency and fundraising rebuilt some public trust.\nJournalists and scholars began checking entries again,\nOpenness stayed but guardrails were added.\nWikipedia survived by learning and changing its rules,\nToday it is cautious and still a global knowledge hub.\"\n",
+      "model_choice": "0.6B",
+      "device": "cuda",
+      "precision": "bf16",
+      "language": "English",
+      "ref_text": "It's didn't work in India in 2008. Directions were unusable, as some streets didn't have names. But street names were the foundation of Google Maps, two researchers flew to India to figure it out. They asked businesses for directions, got people to sketch maps, and even followed strangers to see how they navigated unfamiliar places. They discovered that people use landmarks, not street names. Navigation involved four critical elements. Orientation, head towards the water. Description of a turn. Turn just past the big bazaar. Confirmation of the right path. You'll see a petrol station on the right. Error correction. If you reach the roundabout, you've gone too far. With these four elements, Google successfully localized maps and took full advantage of landmarks. That's why today your directions in India often say \"turn left after the temple\" instead of just a street name.",
+      "seed": 682779102015929,
+      "max_new_tokens": 2048,
+      "top_p": 0.9,
+      "top_k": 70,
+      "temperature": 0.8,
+      "repetition_penalty": 1.05,
+      "x_vector_only": false,
+      "attention": "sdpa",
+      "unload_model_after_generate": true,
+      "custom_model_path": "",
+      "ref_audio": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "FB_Qwen3TTSVoiceClone",
+    "_meta": {
+      "title": "🎭 Qwen3-TTS VoiceClone"
+    }
+  }
+}

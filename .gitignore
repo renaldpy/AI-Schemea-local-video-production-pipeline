@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Generated output — do not commit large media files
+IMAGE/
+VIDEO/
+VOICE/
+downloads/
+wiki_downloads/
+
+# JSON data files — may contain private content or large payloads
+Text_Files/processed_output.json
+Text_Files/historical_selections.json
+
+# Historical photos — sourced externally; do not commit copyrighted images
+historical_photos/
+
+# Environment / secrets
+.env
+*.env
+config.local.py
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+rfile.r
