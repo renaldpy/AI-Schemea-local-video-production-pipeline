@@ -317,13 +317,3 @@ Both image and video generation use the same ComfyUI API pattern:
 
 ---
 
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
----
-
-## 📄 License
-
-See [LICENSE](LICENSE).
-"# AI-Schemea-local-video-production-pipeline" 
